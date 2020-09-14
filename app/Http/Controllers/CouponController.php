@@ -38,9 +38,10 @@ class CouponController extends Controller {
         // $coupon->update(request()->toArray())->save();
         $attributes = request()->validate([
             'code' => 'string',
-            'amount' => 'number',
+            'value' => 'numeric',
+            'type' => 'in:amount,value',
             'expires-at' => 'date',
-            'max-times-used' => 'number',
+            'max-times-used' => 'numeric',
             'active' => 'boolean'
         ]);
 
