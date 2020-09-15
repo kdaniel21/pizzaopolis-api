@@ -39,7 +39,7 @@ class CouponController extends Controller {
         $attributes = request()->validate([
             'code' => 'string',
             'value' => 'numeric',
-            'type' => 'in:amount,value',
+            'type' => 'in:amount,percent',
             'expires-at' => 'date',
             'max-times-used' => 'numeric',
             'active' => 'boolean'
