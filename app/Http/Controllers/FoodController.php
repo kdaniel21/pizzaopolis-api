@@ -5,10 +5,17 @@ namespace App\Http\Controllers;
 use App\Food;
 
 class FoodController extends Controller {
-    public function index() {
+    public function indexPublic() {
         return response()->json([
             'status' => 'success',
             'data' => Food::where('active', true)->with('ingredients')->get()
+        ]);
+    }
+
+    public function index() {
+        return response()->json([
+            'status' => 'success',
+            'data' => Food::with('ingredients')->get()
         ]);
     }
 
@@ -30,8 +37,14 @@ class FoodController extends Controller {
 
         // Modify ingredients if necessary
         $ingredients = request('ingredients');
-        if (request('ingredients')) {
-            $food->ingredients()->sync($ingredients);
+        if ($ingredients) {
+            $ids = collect($ingredients)->map(
+                function ($ingredient) {
+                    return $ingredient['id'];
+                }
+            );
+
+            $food->ingredients()->sync($ids);
         }
 
 
