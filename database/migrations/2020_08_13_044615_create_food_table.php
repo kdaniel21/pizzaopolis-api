@@ -17,7 +17,6 @@ class CreateFoodTable extends Migration {
             $table->string('name');
             $table->double('price');
             $table->double('discounted_price')->nullable();
-            $table->string('category')->nullable();
             $table->boolean('active')->default(true);
             
             $table->timestamps();
