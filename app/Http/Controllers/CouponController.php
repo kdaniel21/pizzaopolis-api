@@ -26,7 +26,7 @@ class CouponController extends Controller {
     }
 
     public function store() {
-        $coupon = Coupon::create(request());
+        $coupon = Coupon::create($this->validateCoupon());
 
         return response()->json([
             'status' => 'success',
@@ -35,21 +35,22 @@ class CouponController extends Controller {
     }
 
     public function update(Coupon $coupon) {
-        // $coupon->update(request()->toArray())->save();
-        $attributes = request()->validate([
+        $coupon->update($this->validateCoupon());
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $coupon
+        ]);
+    }
+
+    protected function validateCoupon() {
+        return request()->validate([
             'code' => 'string',
             'value' => 'numeric',
             'type' => 'in:amount,percent',
             'expires-at' => 'date',
             'max-times-used' => 'numeric',
             'active' => 'boolean'
-        ]);
-
-        $coupon->update($attributes);
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $coupon
         ]);
     }
 }
