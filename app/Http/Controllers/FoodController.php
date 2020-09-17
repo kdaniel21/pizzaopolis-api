@@ -8,14 +8,14 @@ class FoodController extends Controller {
     public function indexPublic() {
         return response()->json([
             'status' => 'success',
-            'data' => Food::where('active', true)->with('ingredients')->get()
+            'data' => Food::where('active', true)->get()
         ]);
     }
 
     public function index() {
         return response()->json([
             'status' => 'success',
-            'data' => Food::with('ingredients')->get()
+            'data' => Food::all()
         ]);
     }
 
@@ -49,8 +49,8 @@ class FoodController extends Controller {
 
         // Modify categories if necessary
         $categories = request('categories');
-        if ($ingredients) {
-            $ids = collect($ingredients)->map(
+        if ($categories) {
+            $ids = collect($categories)->map(
                 function ($category) {
                     return $category['id'];
                 }
@@ -79,7 +79,6 @@ class FoodController extends Controller {
             'name' => ['required', 'max:70', 'string'],
             'price' => ['required', 'numeric'],
             'discounted_price' => ['nullable', 'numeric'],
-            'category' => ['nullable', 'string'],
             'active' => ['nullable', 'boolean']
         ]);
     }
@@ -89,7 +88,6 @@ class FoodController extends Controller {
             'name' => ['max:70', 'string'],
             'price' => ['numeric'],
             'discounted_price' => ['nullable', 'numeric'],
-            'category' => ['nullable', 'string'],
             'active' => ['nullable', 'boolean']
         ]);
     }
