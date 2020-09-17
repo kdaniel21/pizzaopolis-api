@@ -48,7 +48,7 @@ class CouponController extends Controller {
             'code' => 'string',
             'value' => 'numeric',
             'type' => 'in:amount,percent',
-            'expires-at' => 'date',
+            'expires_at' => 'date',
             'max-times-used' => 'numeric',
             'active' => 'boolean'
         ]);
