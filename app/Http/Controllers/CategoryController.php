@@ -15,7 +15,7 @@ class CategoryController extends Controller {
     }
 
     public function create() {
-        $attr = request()->validateOrFail(['name' => ['required', 'string']]);
+        $attr = request()->validate(['name' => ['required', 'string']]);
 
         $newCategory = Category::create($attr);
 
@@ -26,7 +26,7 @@ class CategoryController extends Controller {
     }
 
     public function destroy(Category $category) {
-        $category->remove();
+        $category->delete();
 
         return response()->json([
             'status' => 'success'
