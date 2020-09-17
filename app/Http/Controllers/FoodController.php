@@ -47,6 +47,18 @@ class FoodController extends Controller {
             $food->ingredients()->sync($ids);
         }
 
+        // Modify categories if necessary
+        $categories = request('categories');
+        if ($ingredients) {
+            $ids = collect($ingredients)->map(
+                function ($category) {
+                    return $category['id'];
+                }
+            );
+
+            $food->categories()->sync($ids);
+        }
+
 
         return response()->json([
             'status' => 'success',
