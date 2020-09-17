@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Coupon;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CouponController extends Controller {
     public function index() {
@@ -25,8 +27,8 @@ class CouponController extends Controller {
         ]);
     }
 
-    public function store() {
-        $coupon = Coupon::create($this->validateCoupon());
+    public function store(Request $request) {
+        $coupon = Coupon::create($this->validateCoupon($request));
 
         return response()->json([
             'status' => 'success',
@@ -34,8 +36,8 @@ class CouponController extends Controller {
         ]);
     }
 
-    public function update(Coupon $coupon) {
-        $coupon->update($this->validateCoupon());
+    public function update(Request $request, Coupon $coupon) {
+        $coupon->update($this->validateCoupon($request));
 
         return response()->json([
             'status' => 'success',
@@ -43,13 +45,16 @@ class CouponController extends Controller {
         ]);
     }
 
-    protected function validateCoupon() {
+    protected function validateCoupon(Request $request) {
+        $request->merge([
+            'expires_at' => new Carbon($request['expires_at']),
+        ]);
         return request()->validate([
             'code' => 'string',
             'value' => 'numeric',
             'type' => 'in:amount,percent',
             'expires_at' => 'date',
-            'max-times-used' => 'numeric',
+            'max_times_used' => 'numeric',
             'active' => 'boolean'
         ]);
     }
