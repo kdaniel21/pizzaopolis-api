@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // FOODS
     Route::group(['prefix' => 'foods'], function () {
         Route::post('/', 'FoodController@store');
+        Route::get('/all', 'FoodController@index');
         Route::patch('/{food}', 'FoodController@update');
         Route::delete('/{food}', 'FoodController@destroy');
     });
@@ -40,6 +41,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/', 'IngredientController@store');
         Route::patch('/{ingredient}', 'IngredientController@update');
         Route::delete('/{ingredient}', 'IngredientController@destroy');
+    });
+
+    // FOOD CATEGORIES
+    Route::group(['prefix' => 'categories'], function () {
+        Route::get('/', 'CategoryController@index');
+        Route::post('/', 'CategoryController@create');
+        Route::delete('/{category}', 'CategoryController@destroy');
     });
     
     // ORDERS
@@ -71,4 +79,4 @@ Route::stripeWebhooks('/payments/success');
 Route::post('/orders', 'OrderController@store');
 
 // Get menu
-Route::get('/foods', 'FoodController@index');
+Route::get('/foods', 'FoodController@indexPublic');
