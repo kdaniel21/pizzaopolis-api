@@ -10,6 +10,7 @@ class Food extends Model {
     protected $guarded = [];
     protected $hidden = ['active', 'created_at', 'updated_at'];
     protected $with = ['ingredients', 'categories'];
+    protected $appends = ['currentPrice'];
     
     public function ingredients() {
         return $this->belongsToMany(Ingredient::class);
@@ -21,5 +22,9 @@ class Food extends Model {
 
     public function currentPrice() {
         return $this->discounted_price ?: $this->price;
+    }
+
+    public function getCurrentPriceAttribute() {
+        return $this->currentPrice();
     }
 }
