@@ -34,24 +34,24 @@ class OrderController extends Controller {
 
     // Create order and return the Stripe Session ID
     public function store() {
-        // return response()->json(request());
-        if (!request('food') || !request('shipping_information')) {
+        if (!request('foods') || !request('shipping_information')) {
             return abort(400);
         }
         
         $order = Order::create();
 
+        
         // Set data
-        $order->addFoods(request('food'));
-
-
+        $order->addFoods(request('foods'));
+        
+        
         if (request('coupon')) {
             $order->redeemCoupon(request('coupon'));
         }
         
         $order->setShippingInformation($this->validateShippingInformation());
-
-
+        
+        
         if (request('billing_information')) {
             $order->setBillingInformation($this->validateBillingInformation());
         }

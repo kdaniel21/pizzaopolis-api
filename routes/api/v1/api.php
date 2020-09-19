@@ -66,9 +66,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
     
     // Current user
-    Route::get('/user', function () {
-        return response()->json(['data' => Auth::user()]);
-    });
+    Route::get('/user', 'CurrentUserController@show');
 });
 
 
