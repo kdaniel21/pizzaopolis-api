@@ -47,7 +47,7 @@ class Order extends Model {
         }
 
         return $this->coupon->type === 'percent'
-            ? $this->total() * ($this->coupon->value / 100)
+            ? $this->totalFoodPrice() * ($this->coupon->value / 100)
             : $this->coupon->value;
     }
 
@@ -78,13 +78,18 @@ class Order extends Model {
     public function setBillingInformation($billingInformation) {
         return $this->billingInformation()->updateOrCreate($billingInformation);
     }
-    
-    public function total() {
-        // Calculates with the discounted price but if there is no discounted price uses the normal price to calculate the total
-        $total = $this
+
+    // Returns the total amount without any coupons applied
+    public function totalFoodPrice() {
+        return $this
             ->foods
             ->map(fn ($food) => $food->currentPrice() * $food->pivot->quantity)
             ->sum();
+    }
+    
+    public function total() {
+        // Calculates with the discounted price but if there is no discounted price uses the normal price to calculate the total
+        $total = $this->totalFoodPrice();
 
         // Apply coupon (or nothing if no coupon provided)
         $discount = $this->couponValue();

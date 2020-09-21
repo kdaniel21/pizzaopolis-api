@@ -14,7 +14,7 @@ class CategoryController extends Controller {
         ]);
     }
 
-    public function create() {
+    public function store() {
         $attr = request()->validate(['name' => ['required', 'string']]);
 
         $newCategory = Category::create($attr);

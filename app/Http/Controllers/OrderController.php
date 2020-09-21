@@ -57,7 +57,7 @@ class OrderController extends Controller {
         }
         
         // Create Stripe payment session
-        $sessionId = $order->checkout();
+        $sessionId = $order->checkout($order->total());
 
         return response()->json([
             'status' => 'success',

@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use function PHPSTORM_META\map;
-use function Symfony\Component\String\b;
+use Illuminate\Support\Facades\Auth;
 
 class CurrentUserController extends Controller {
     public function show() {

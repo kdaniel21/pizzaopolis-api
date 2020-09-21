@@ -3,7 +3,14 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use function Symfony\Component\String\b;
+use App\Http\Controllers\FoodController;
+use App\Http\Controllers\OrderCancellationController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\CurrentUserController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IngredientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,53 +35,54 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // FOODS
     Route::group(['prefix' => 'foods'], function () {
-        Route::post('/', 'FoodController@store');
-        Route::get('/all', 'FoodController@index');
-        Route::patch('/{food}', 'FoodController@update');
-        Route::delete('/{food}', 'FoodController@destroy');
+        Route::post('/', [FoodController::class, 'store']);
+        Route::get('/all', [FoodController::class, 'index']);
+        Route::patch('/{food}', [FoodController::class, 'update']);
+        Route::delete('/{food}', [FoodController::class, 'destroy']);
     });
     
     
     // INGREDIENTS
     Route::group(['prefix' => 'ingredients'], function () {
-        Route::get('/', 'IngredientController@index');
-        Route::post('/', 'IngredientController@store');
-        Route::patch('/{ingredient}', 'IngredientController@update');
-        Route::delete('/{ingredient}', 'IngredientController@destroy');
+        Route::get('/', [IngredientController::class, 'index']);
+        Route::post('/', [IngredientController::class, 'store']);
+        Route::patch('/{ingredient}', [IngredientController::class, 'update']);
+        Route::delete('/{ingredient}', [IngredientController::class, 'destroy']);
     });
 
     // FOOD CATEGORIES
     Route::group(['prefix' => 'categories'], function () {
-        Route::get('/', 'CategoryController@index');
-        Route::post('/', 'CategoryController@create');
-        Route::delete('/{category}', 'CategoryController@destroy');
+        Route::get('/', [CategoryController::class, 'index']);
+        Route::post('/', [CategoryController::class, 'store']);
+        Route::delete('/{category}', [CategoryController::class, 'destroy']);
     });
     
     // ORDERS
     Route::group(['prefix' => 'orders'], function () {
-        Route::get('/', 'OrderController@index');
-        Route::get('/{order}', 'OrderController@show');
-        Route::patch('/{order}/cancel', 'OrderCancellationController@update');
+        Route::get('/', [OrderController::class, 'index']);
+        Route::get('/{order}', [OrderController::class, 'show']);
+        Route::patch('/{order}/cancel', [OrderCancellationController::class, 'update']);
     });
     
     // COUPONS
     Route::group(['prefix' => '/coupons'], function () {
-        Route::get('/', 'CouponController@index');
-        Route::get('/{coupon:code}', 'CouponController@show');
-        Route::post('/', 'CouponController@store');
-        Route::patch('/{coupon}', 'CouponController@update');
+        Route::get('/', [CouponController::class, 'index']);
+        Route::post('/', [CouponController::class, 'store']);
+        Route::patch('/{coupon}', [CouponController::class, 'update']);
     });
     
     // Current user
-    Route::get('/user', 'CurrentUserController@show');
+    Route::get('/user', [CurrentUserController::class, 'show']);
 });
 
 
 // STRIPE WEBHOOK ROUTE
 Route::stripeWebhooks('/payments/success');
+// Check coupon validity
+Route::get('/coupons/{coupon:code}', [CouponController::class, 'show']);
 
 // Create order
-Route::post('/orders', 'OrderController@store');
+Route::post('/orders', [OrderController::class, 'store']);
 
 // Get menu
-Route::get('/foods', 'FoodController@indexPublic');
+Route::get('/foods', [FoodController::class, 'indexPublic']);

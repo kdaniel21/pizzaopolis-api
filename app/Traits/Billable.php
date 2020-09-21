@@ -6,7 +6,7 @@ use \Stripe\Stripe;
 use \Stripe\Checkout\Session;
 
 trait Billable {
-    public function checkout() {
+    public function checkout($total = 0) {
         Stripe::setApiKey(env('STRIPE_API_KEY'));
 
         // line_items is not specified because coupons can't be added manually
@@ -18,7 +18,7 @@ trait Billable {
                 [
                     'price_data' => [
                         'currency' => 'eur',
-                        'unit_amount' => $this->total() * 100,
+                        'unit_amount' => $total * 100,
                         'product_data' => [
                             'name' => "Order Nr. {$this->id}"
                         ],
