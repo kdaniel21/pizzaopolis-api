@@ -10,10 +10,14 @@ class OrderController extends Controller {
             'status' => 'success',
             // Include name and total amount to make orders easier to find
             'data' => Order::with(['foods', 'transaction', 'shippingInformation'])->get()->map(function ($order) {
-                $order['total'] = $order->transaction->total;
-                $order['name'] = $order->shippingInformation->name;
-                unset($order['transaction']);
-                unset($order['shippingInformation']);
+                if (isset($order->transaction->total)) {
+                    $order['total'] =  $order->transaction->total;
+                    unset($order['transaction']);
+                }
+                if (isset($order->shippingInformation->name)) {
+                    $order['name'] = $order->shippingInformation->name;
+                    unset($order['shippingInformation']);
+                }
                 return $order;
             }),
         ]);
